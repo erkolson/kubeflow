@@ -18,7 +18,7 @@ if [[ ! -d "${KUBEFLOW_REPO}" ]]; then
     TAG=${KUBEFLOW_VERSION}
   else
     TAG=v${KUBEFLOW_VERSION}
-  fi  
+  fi
   TMPDIR=$(mktemp -d /tmp/tmp.kubeflow-repo-XXXX)
   curl -L -o ${TMPDIR}/kubeflow.tar.gz https://github.com/kubeflow/kubeflow/archive/${TAG}.tar.gz
   tar -xzvf ${TMPDIR}/kubeflow.tar.gz  -C ${TMPDIR}
@@ -64,7 +64,7 @@ SETUP_PROJECT=${SETUP_PROJECT:true}
 K8S_NAMESPACE=${K8S_NAMESPACE:-"kubeflow"}
 CONFIG_FILE=${CONFIG_FILE:-"cluster-kubeflow.yaml"}
 
-if [ -z "${PROJECT_NUMBER}" ]; then 
+if [ -z "${PROJECT_NUMBER}" ]; then
   PROJECT_NUMBER=`gcloud projects describe ${PROJECT} --format='value(project_number)'`
 fi
 
@@ -110,10 +110,10 @@ if ${KUBEFLOW_DEPLOY}; then
 
   if [ ${exists} -eq 0 ]; then
     echo ${DEPLOYMENT_NAME} exists
-    gcloud deployment-manager --project=${PROJECT} deployments update ${DEPLOYMENT_NAME} --config=${CONFIG_FILE}
+    gcloud deployment-manager --project=${PROJECT} deployments update ${DEPLOYMENT_NAME} --config="${KUBEFLOW_DM_DIR}/${CONFIG_FILE}"
   else
     # Run Deployment Manager
-    gcloud deployment-manager --project=${PROJECT} deployments create ${DEPLOYMENT_NAME} --config=${CONFIG_FILE}
+    gcloud deployment-manager --project=${PROJECT} deployments create ${DEPLOYMENT_NAME} --config="${KUBEFLOW_DM_DIR}/${CONFIG_FILE}"
   fi
 
   # TODO(jlewi): We should name the secrets more consistently based on the service account name.
